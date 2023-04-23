@@ -1,0 +1,18 @@
+{
+  "name": "ibge-localidades-json",
+  "description": "Arquivos JSON de localidades do Brasil para Regiões, Estados, Cidades e Distritos. Compilados a partir da API de localidades do IBGE.",
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "ibge.js",
+  "scripts": {
+    "build": "node ibge.js"
+  },
+  "dependencies": {
+    "node-fetch": "latest"
+  },
+  "author": "Alex Bruno Cáceres <alex.bruno@mediacentre.network>",
+  "license": "MIT"
+}
