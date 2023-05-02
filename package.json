@@ -1,7 +1,7 @@
 {
   "name": "ibge-localidades-json",
   "description": "Arquivos JSON de localidades do Brasil para Regiões, Estados, Cidades e Distritos. Compilados a partir da API de localidades do IBGE.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "engines": {
     "node": ">=18.0.0"
