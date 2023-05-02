@@ -4,7 +4,7 @@ Arquivos JSON de localidades do Brasil para Regiões, Estados, Cidades e Distrit
 
 ## Como usar estes dados?
 
-Estes arquivos foram compilados para servir ao desenvolvimento aplicações que precisem de dados sobre localidades do Brasil.
+Estes arquivos foram compilados para servir ao desenvolvimento de aplicações que precisem de dados sobre localidades do Brasil.
 
 Use-os livremente em seus projetos, mas lembre-se de citar a fonte.
 
