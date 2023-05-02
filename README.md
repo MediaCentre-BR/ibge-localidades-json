@@ -14,6 +14,7 @@ Use-os livremente em seus projetos, mas lembre-se de citar a fonte.
 - `estados.json` - 1.3K, 27 Estados
 - `cidades.json` - 353K, 5.570 Cidades
 - `distritos.json` - 1.1M, 10.670 Distritos
+- `capitais.json` - 1.7K, 27 Capitais (também presentes em `cidades.json`)
 
 ## Interface dos dados
 
