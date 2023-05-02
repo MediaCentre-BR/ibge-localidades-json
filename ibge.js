@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { writeFileSync } from 'fs'
+import { readFileSync, writeFileSync } from 'fs'
 import fetch from 'node-fetch'
 
 const root = process.cwd()
@@ -83,10 +83,56 @@ export async function getDistricts() {
   writeData(result, 'distritos.json')
 }
 
+// Filter only capital cities from each state
+export async function getCapitals() {
+  // List of all capital cities
+  const capitals = [
+    { estado: 'AC', nome: 'Rio Branco' },
+    { estado: 'AL', nome: 'Maceió' },
+    { estado: 'AM', nome: 'Manaus' },
+    { estado: 'AP', nome: 'Macapá' },
+    { estado: 'BA', nome: 'Salvador' },
+    { estado: 'CE', nome: 'Fortaleza' },
+    { estado: 'DF', nome: 'Brasília' },
+    { estado: 'ES', nome: 'Vitória' },
+    { estado: 'GO', nome: 'Goiânia' },
+    { estado: 'MA', nome: 'São Luís' },
+    { estado: 'MG', nome: 'Belo Horizonte' },
+    { estado: 'MS', nome: 'Campo Grande' },
+    { estado: 'MT', nome: 'Cuiabá' },
+    { estado: 'PA', nome: 'Belém' },
+    { estado: 'PB', nome: 'João Pessoa' },
+    { estado: 'PE', nome: 'Recife' },
+    { estado: 'PI', nome: 'Teresina' },
+    { estado: 'PR', nome: 'Curitiba' },
+    { estado: 'RJ', nome: 'Rio de Janeiro' },
+    { estado: 'RN', nome: 'Natal' },
+    { estado: 'RO', nome: 'Porto Velho' },
+    { estado: 'RR', nome: 'Boa Vista' },
+    { estado: 'RS', nome: 'Porto Alegre' },
+    { estado: 'SC', nome: 'Florianópolis' },
+    { estado: 'SE', nome: 'Aracaju' },
+    { estado: 'SP', nome: 'São Paulo' },
+    { estado: 'TO', nome: 'Palmas' },
+  ]
+  const josn = join(root, 'cidades.json')
+  const data = readFileSync(josn, 'utf8')
+  const cities = JSON.parse(data)
+  const result = capitals.map((cap) => {
+    const city = cities.find(
+      (city) => city.nome === cap.nome && city.estado === cap.estado
+    )
+    return city
+  })
+  console.log(result.length, 'capitais...')
+  writeData(result, 'capitais.json')
+}
+
 // Run all functions
 console.log('Obtendo localidades da base IBGE...')
 Promise.all([getRegions(), getStates(), getCities(), getDistricts()]).then(
   () => {
+    getCapitals()
     console.log('Localidades prontas na pasta public/ibge!')
   }
 )
