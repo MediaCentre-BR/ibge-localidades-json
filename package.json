@@ -8,7 +8,8 @@
   },
   "main": "ibge.js",
   "scripts": {
-    "build": "node ibge.js"
+    "build": "node ibge.js",
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {
     "node-fetch": "latest"
