@@ -21,7 +21,6 @@ export async function getLocals(endpoint) {
 // Get geo metadata from IBGE API
 export async function getGeoData(id) {
   const data = await getData(`v3/malhas/municipios/${id}/metadados`)
-
   try {
     const list = await data.json()
     return list[0]
@@ -146,14 +145,6 @@ export async function getCapitals() {
       const city = cities.find(
         (city) => city.nome === cap.nome && city.uf === cap.uf
       )
-
-      // const location = await getLocationData(city.nome, city.estado)
-
-      // if (location) {
-      //   city.lat = location.lat
-      //   city.lon = location.lon
-      // }
-
       return city
     })
   )
