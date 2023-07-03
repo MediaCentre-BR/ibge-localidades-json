@@ -33,11 +33,17 @@ interface Estado {
 }
 
 // cidades.json : Cidade[]
+// capitais.json : Cidade[]
 interface Cidade {
   id: number
   nome: string
-  estado: Estado['sigla']
+  uf: Estado['sigla']
+  estado: Estado['nome']
   regiao: Regiao['sigla']
+  centreoide: {
+    latitude: number
+    longitude: number
+  }
 }
 
 // distritos.json : Distrito[]
@@ -46,6 +52,7 @@ interface Distrito {
   nome: string
   cid: Cidade['id']
   cidade: Cidade['nome']
+  uf: Estado['sigla']
   estado: Estado['sigla']
   regiao: Regiao['sigla']
 }

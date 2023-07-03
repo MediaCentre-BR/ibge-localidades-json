@@ -18,6 +18,17 @@ export async function getLocals(endpoint) {
   return data.json()
 }
 
+// Get geo metadata from IBGE API
+export async function getGeoData(id) {
+  const data = await getData(`v3/malhas/municipios/${id}/metadados`)
+  try {
+    const list = await data.json()
+    return list[0]
+  } catch {
+    return null
+  }
+}
+
 // Write data to a JSON file
 export function writeData(data, file) {
   const dest = join(root, file)
@@ -51,16 +62,26 @@ export async function getStates() {
 // Get cities from IBGE API and write to JSON files
 export async function getCities() {
   const data = await getLocals('municipios?orderBy=nome')
-  const result = data.map((city) => {
-    city.estado = city.microrregiao.mesorregiao.UF.sigla
-    city.regiao = city.microrregiao.mesorregiao.UF.regiao.sigla
+  const result = await Promise.all(
+    data.map((city, i) => {
+      city.uf = city.microrregiao.mesorregiao.UF.sigla
+      city.estado = city.microrregiao.mesorregiao.UF.nome
+      city.regiao = city.microrregiao.mesorregiao.UF.regiao.sigla
 
-    delete city.microrregiao
-    delete city.mesorregiao
-    delete city['regiao-imediata']
+      delete city.microrregiao
+      delete city.mesorregiao
+      delete city['regiao-imediata']
 
-    return city
-  })
+      return new Promise((resolve) => {
+        setTimeout(async () => {
+          const location = await getGeoData(city.id)
+          city.centroide = location.centroide
+          resolve(city)
+        }, i * 10)
+      })
+    })
+  )
+
   console.log(result.length, 'cidades...')
   writeData(result, 'cidades.json')
 }
@@ -71,7 +92,8 @@ export async function getDistricts() {
   const result = data.map((district) => {
     district.cid = district.municipio.id
     district.cidade = district.municipio.nome
-    district.estado = district.municipio.microrregiao.mesorregiao.UF.sigla
+    district.uf = district.municipio.microrregiao.mesorregiao.UF.sigla
+    district.estado = district.municipio.microrregiao.mesorregiao.UF.nome
     district.regiao =
       district.municipio.microrregiao.mesorregiao.UF.regiao.sigla
 
@@ -87,43 +109,45 @@ export async function getDistricts() {
 export async function getCapitals() {
   // List of all capital cities
   const capitals = [
-    { estado: 'AC', nome: 'Rio Branco' },
-    { estado: 'AL', nome: 'Maceió' },
-    { estado: 'AM', nome: 'Manaus' },
-    { estado: 'AP', nome: 'Macapá' },
-    { estado: 'BA', nome: 'Salvador' },
-    { estado: 'CE', nome: 'Fortaleza' },
-    { estado: 'DF', nome: 'Brasília' },
-    { estado: 'ES', nome: 'Vitória' },
-    { estado: 'GO', nome: 'Goiânia' },
-    { estado: 'MA', nome: 'São Luís' },
-    { estado: 'MG', nome: 'Belo Horizonte' },
-    { estado: 'MS', nome: 'Campo Grande' },
-    { estado: 'MT', nome: 'Cuiabá' },
-    { estado: 'PA', nome: 'Belém' },
-    { estado: 'PB', nome: 'João Pessoa' },
-    { estado: 'PE', nome: 'Recife' },
-    { estado: 'PI', nome: 'Teresina' },
-    { estado: 'PR', nome: 'Curitiba' },
-    { estado: 'RJ', nome: 'Rio de Janeiro' },
-    { estado: 'RN', nome: 'Natal' },
-    { estado: 'RO', nome: 'Porto Velho' },
-    { estado: 'RR', nome: 'Boa Vista' },
-    { estado: 'RS', nome: 'Porto Alegre' },
-    { estado: 'SC', nome: 'Florianópolis' },
-    { estado: 'SE', nome: 'Aracaju' },
-    { estado: 'SP', nome: 'São Paulo' },
-    { estado: 'TO', nome: 'Palmas' },
+    { uf: 'AC', nome: 'Rio Branco' },
+    { uf: 'AL', nome: 'Maceió' },
+    { uf: 'AM', nome: 'Manaus' },
+    { uf: 'AP', nome: 'Macapá' },
+    { uf: 'BA', nome: 'Salvador' },
+    { uf: 'CE', nome: 'Fortaleza' },
+    { uf: 'DF', nome: 'Brasília' },
+    { uf: 'ES', nome: 'Vitória' },
+    { uf: 'GO', nome: 'Goiânia' },
+    { uf: 'MA', nome: 'São Luís' },
+    { uf: 'MG', nome: 'Belo Horizonte' },
+    { uf: 'MS', nome: 'Campo Grande' },
+    { uf: 'MT', nome: 'Cuiabá' },
+    { uf: 'PA', nome: 'Belém' },
+    { uf: 'PB', nome: 'João Pessoa' },
+    { uf: 'PE', nome: 'Recife' },
+    { uf: 'PI', nome: 'Teresina' },
+    { uf: 'PR', nome: 'Curitiba' },
+    { uf: 'RJ', nome: 'Rio de Janeiro' },
+    { uf: 'RN', nome: 'Natal' },
+    { uf: 'RO', nome: 'Porto Velho' },
+    { uf: 'RR', nome: 'Boa Vista' },
+    { uf: 'RS', nome: 'Porto Alegre' },
+    { uf: 'SC', nome: 'Florianópolis' },
+    { uf: 'SE', nome: 'Aracaju' },
+    { uf: 'SP', nome: 'São Paulo' },
+    { uf: 'TO', nome: 'Palmas' },
   ]
   const josn = join(root, 'cidades.json')
   const data = readFileSync(josn, 'utf8')
   const cities = JSON.parse(data)
-  const result = capitals.map((cap) => {
-    const city = cities.find(
-      (city) => city.nome === cap.nome && city.estado === cap.estado
-    )
-    return city
-  })
+  const result = await Promise.all(
+    capitals.map(async (cap) => {
+      const city = cities.find(
+        (city) => city.nome === cap.nome && city.uf === cap.uf
+      )
+      return city
+    })
+  )
   console.log(result.length, 'capitais...')
   writeData(result, 'capitais.json')
 }
@@ -131,8 +155,8 @@ export async function getCapitals() {
 // Run all functions
 console.log('Obtendo localidades da base IBGE...')
 Promise.all([getRegions(), getStates(), getCities(), getDistricts()]).then(
-  () => {
-    getCapitals()
-    console.log('Localidades prontas na pasta public/ibge!')
+  async () => {
+    await getCapitals()
+    console.log('Localidades salvas em arquivos JSON!')
   }
 )
