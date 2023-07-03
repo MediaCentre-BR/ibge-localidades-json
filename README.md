@@ -40,6 +40,10 @@ interface Cidade {
   uf: Estado['sigla']
   estado: Estado['nome']
   regiao: Regiao['sigla']
+  centreoide: {
+    latitude: number
+    longitude: number
+  }
 }
 
 // distritos.json : Distrito[]
