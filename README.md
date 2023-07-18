@@ -44,6 +44,22 @@ interface Cidade {
     latitude: number
     longitude: number
   }
+  microrregiao: {
+    id: number
+    nome: string
+    mesorregiao: {
+      id: number
+      nome: string
+    }
+  }
+  'regiao-imediata': {
+    id: number
+    nome: string
+    'regiao-intermediaria': {
+      id: number
+      nome: string
+    }
+  }
 }
 
 // distritos.json : Distrito[]

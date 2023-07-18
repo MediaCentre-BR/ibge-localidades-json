@@ -68,9 +68,8 @@ export async function getCities() {
       city.estado = city.microrregiao.mesorregiao.UF.nome
       city.regiao = city.microrregiao.mesorregiao.UF.regiao.sigla
 
-      delete city.microrregiao
-      delete city.mesorregiao
-      delete city['regiao-imediata']
+      delete city.microrregiao.mesorregiao.UF
+      delete city['regiao-imediata']['regiao-intermediaria'].UF
 
       return new Promise((resolve) => {
         setTimeout(async () => {
