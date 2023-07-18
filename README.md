@@ -10,11 +10,11 @@ Use-os livremente em seus projetos, mas lembre-se de citar a fonte.
 
 ## Arquivos
 
-- `regioes.json` - 159b, 5 Regiões
-- `estados.json` - 1.3K, 27 Estados
-- `cidades.json` - 353K, 5.570 Cidades
-- `distritos.json` - 1.1M, 10.670 Distritos
-- `capitais.json` - 1.7K, 27 Capitais (também presentes em `cidades.json`)
+- `regioes.json` - 159 Bytes, 5 Regiões
+- `estados.json` - 1.28 KB, 27 Estados
+- `cidades.json` - 1.87 MB, 5.570 Cidades
+- `distritos.json` - 1.25 MB, 10.670 Distritos
+- `capitais.json` - 9.08 KB, 27 Capitais (também presentes em `cidades.json`)
 
 ## Interface dos dados
 
