@@ -66,7 +66,8 @@ export async function getCities() {
     data.map((city, i) => {
       city.uf = city.microrregiao.mesorregiao.UF.sigla
       city.estado = city.microrregiao.mesorregiao.UF.nome
-      city.regiao = city.microrregiao.mesorregiao.UF.regiao.sigla
+      city.reg = city.microrregiao.mesorregiao.UF.regiao.sigla
+      city.regiao = city.microrregiao.mesorregiao.UF.regiao.nome
 
       delete city.microrregiao.mesorregiao.UF
       delete city['regiao-imediata']['regiao-intermediaria'].UF

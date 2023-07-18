@@ -39,7 +39,8 @@ interface Cidade {
   nome: string
   uf: Estado['sigla']
   estado: Estado['nome']
-  regiao: Regiao['sigla']
+  reg: Regiao['sigla']
+  regiao: Regiao['nome']
   centreoide: {
     latitude: number
     longitude: number
